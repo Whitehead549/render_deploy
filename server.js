@@ -5,7 +5,7 @@ const cors = require('cors');
 app.use(cors()); // important to allow cross-origin
 
 app.get('/api', (req, res) => {
-  res.json({ message: "Hello from Node.js server!" });
+  res.json({ message: "This is coming from render.js!" });
 });
 
 const PORT = process.env.PORT || 3000;
