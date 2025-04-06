@@ -1,9 +1,9 @@
 const express = require('express');
 const cors = require('cors');
-const fetch = require('node-fetch'); // For server-side HTTP requests
+const fetch = require('node-fetch');
 const app = express();
 
-// Replace with your actual Turnstile Secret Key
+// Your Cloudflare Turnstile Secret Key
 const SECRET_KEY = '0x4AAAAAABD1OrctXKc7ZmhAXwN691xMqb8';
 
 app.use(cors());
@@ -31,7 +31,7 @@ app.post('/api', async (req, res) => {
 
     if (data.success) {
       return res.json({ 
-        message: 'Verified and connected successfully working!',
+        message: 'Verified and connected successfully working perfectly!',
         success: true
       });
     } else {
