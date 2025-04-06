@@ -1,9 +1,9 @@
 const express = require('express');
 const cors = require('cors');
-const fetch = require('node-fetch');
+const fetch = require('node-fetch'); // For server-side HTTP requests
 const app = express();
 
-// Using your exact secret key (with 0x prefix)
+// Replace with your actual Turnstile Secret Key
 const SECRET_KEY = '0x4AAAAAABD1OrctXKc7ZmhAXwN691xMqb8';
 
 app.use(cors());
@@ -20,33 +20,31 @@ app.post('/api', async (req, res) => {
   }
 
   try {
-    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: `secret=${encodeURIComponent(SECRET_KEY)}&response=${encodeURIComponent(token)}`
     });
 
-    const data = await response.json();
-    
-    console.log('Turnstile response:', data); // Log the full response
-    
+    const data = await verifyRes.json();
+    console.log('Turnstile verification result:', data);
+
     if (data.success) {
       return res.json({ 
-        message: "Verified and connected successfully!",
+        message: 'Verified and connected successfully working!',
         success: true
       });
     } else {
       return res.status(403).json({ 
-        error: 'Verification failed. Errors: ' + (data['error-codes']?.join(', ') || 'unknown'),
-        success: false,
-        errorCodes: data['error-codes']
+        error: 'Verification failed: ' + (data['error-codes']?.join(', ') || 'unknown'),
+        success: false 
       });
     }
   } catch (error) {
     console.error('Verification error:', error);
     return res.status(500).json({ 
-      error: 'Internal server error during verification',
-      success: false
+      error: 'Server error during verification',
+      success: false 
     });
   }
 });
